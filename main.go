@@ -1,17 +1,23 @@
 package main
+
 import (
-	"io"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/nanikasi/go_blog_api/handlers"
 )
 
 func main() {
-	helloHandler := func(w http.ResponseWriter, req *http.Request) {
-		io.WriteString(w, "Hello, World!\n")
-	}
+	r := mux.NewRouter()
 
-	http.HandleFunc("/hello", helloHandler)
+	r.HandleFunc("/hello", handlers.HelloHandler).Methods(http.MethodGet)
+	r.HandleFunc("/article", handlers.PostArticleHandler)
+	r.HandleFunc("/article/list", handlers.ArticleListHandler)
+	r.HandleFunc("/article/{id:[0-9]+}", handlers.ArticleDetailHandler).Methods(http.MethodGet)
+	r.HandleFunc("/article/nice", handlers.PostNiceHandler)
+	r.HandleFunc("/comment", handlers.PostCommentHandler)
 
 	log.Println("server start at port 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
