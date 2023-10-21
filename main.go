@@ -10,7 +10,7 @@ func main() {
 		io.WriteString(w, "Hello, World!\n")
 	}
 
-	http.HandleFunc("/", helloHandler)
+	http.HandleFunc("/hello", helloHandler)
 
 	log.Println("server start at port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
